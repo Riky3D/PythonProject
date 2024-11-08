@@ -13,7 +13,3 @@ Resources:
           Properties:
             Path: /test
             Method: get
-      Timeout: 3
-      Environment:
-        Variables:
-          KEY: "value"
