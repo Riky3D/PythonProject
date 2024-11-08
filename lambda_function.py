@@ -12,11 +12,9 @@ API_KEY = os.getenv('API_KEY')
 # The CITY variable can now be provided dynamically through the event
 # CITY = os.getenv('CITY')  # Removed since the city is passed in the event
 
-dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('YourTableName')  # Replace with your actual table name
+def lambda_handler(event, context):
 
-def get_weather_data(city):
-    """Fetch weather data from OpenWeatherMap API."""
+      """Fetch weather data from OpenWeatherMap API."""
     try:
         api_url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric'
         response = requests.get(api_url)
@@ -34,8 +32,8 @@ def get_weather_data(city):
     except requests.RequestException as e:
         print(f"Error fetching weather data: {e}")
         return None
-
-def lambda_handler(event, context):
+    
+    
     """AWS Lambda function handler"""
     # Get the city name from the event (user input)
     city = event.get('city')
