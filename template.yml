@@ -1,4 +1,4 @@
-Transform: 'AWS::Serverless-2016-10-31'
+Transform: AWS::Serverless-2016-10-31
 
 Resources:
   MyLambdaFunction:
@@ -8,10 +8,9 @@ Resources:
       Runtime: python3.8
       CodeUri: ./
       MemorySize: 128
-      Timeout: 3
       Events:
         ApiEvent:
           Type: Api
           Properties:
-            Path: /test              
+            Path: /test
             Method: get        
