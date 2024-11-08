@@ -59,7 +59,7 @@ def lambda_handler(event, context):
             bucket_name = 'rikeshestiosite'
             file_name = 'sample.txt'
 
-            s3.response = s3_client.get_object(Bucket=bucket_name, Key=file_name)
+            s3_response = s3_client.get_object(Bucket=bucket_name, Key=file_name)
             print("s3 response:", s3_response)
 
             file_data = s3_response["Body"].read().decode('utf')
