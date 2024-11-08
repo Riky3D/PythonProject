@@ -33,7 +33,7 @@ Resources:
     Properties:
       Role: !GetAtt LambdaExecutionRole.Arn
       Handler: lambda_function.handler
-      Runtime: python3.8
+      Runtime: python3.11
       CodeUri: ./
       MemorySize: 128
       Events:
