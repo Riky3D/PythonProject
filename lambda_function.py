@@ -58,13 +58,7 @@ def lambda_handler(event, context):
         print("Weather data stored successfully.")
     except Exception as e:
         print(f"Error storing data in DynamoDB: {e}")
-    
-    try:
-        return table.scan()
-    except:
-        raise
 
-    
     if CITY:
         weather_data = get_weather_data(CITY)
         if weather_data:
