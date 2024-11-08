@@ -6,8 +6,9 @@ Resources:
     Properties:
       Handler: lambda_function.handler
       Runtime: python3.8
-      CodeUri: ./
+      CodeUri: .
       MemorySize: 128
+      Timeout: 3
       Events:
         ApiEvent:
           Type: Api
