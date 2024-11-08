@@ -1,37 +1,8 @@
 Transform: AWS::Serverless-2016-10-31
-
-Resources:
-  LambdaExecutionRole:
-    Type: "AWS::IAM::Role"
-    Properties: 
-      RoleName: "LambdaDynamoDBExecutionRole"
-      AssumeRolePolicyDocument: 
-        Version: "2012-10-17"
-        Statement: 
-          - Effect: "Allow"
-            Principal: 
-              Service: "lambda.amazonaws.com"
-            Action: "sts:AssumeRole"
-      Policies:
-        - PolicyName: "DynamoDBAccessPolicy"
-          PolicyDocument:
-            Version: "2012-10-17"
-            Statement:
-              - Effect: "Allow"
-                Action:
-                  - "dynamodb:GetItem"
-                  - "dynamodb:PutItem"
-                  - "dynamodb:UpdateItem"
-                  - "dynamodb:DeleteItem"
-                Resource: 
-                  - arn:aws:dynamodb:eu-west-2:989194088083:table/WeatherData
-
-
 Resources:
   MyLambdaFunction:
     Type: AWS::Serverless::Function
     Properties:
-      Role: !GetAtt LambdaExecutionRole.Arn
       Handler: lambda_function.handler
       Runtime: python3.11
       CodeUri: ./
