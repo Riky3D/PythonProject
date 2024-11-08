@@ -12,6 +12,7 @@ API_KEY = os.getenv('API_KEY')
 CITY = os.getenv('CITY') 
 
 s3_client = boto3.client('s3')
+bucket_name = 'rikeshestiosite'
 
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('WeatherData')  # Replace with your actual table name
@@ -56,14 +57,11 @@ def lambda_handler(event, context):
     if CITY:
         weather_data = get_weather_data(CITY)
         if weather_data:
-            bucket_name = 'rikeshestiosite'
-            file_name = 'sample.txt'
-
-            s3_response = s3_client.get_object(Bucket=bucket_name, Key=file_name)
-            print("s3 response:", s3_response)
-
-            file_data = s3_response["Body"].read().decode('utf')
-            print("file_data", file_data)
+            response = dynamodb.export_table_to_point_in_time(
+                TableName=table.name,
+                S3Bucket=bucket_name,
+                ExportFormat='DYNAMODB_JSON',
+            )
             store_data_in_dynamodb(weather_data)
             return {
                 'statusCode': 200,
