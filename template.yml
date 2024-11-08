@@ -8,6 +8,7 @@ Resources:
       CodeUri: ./
       Policies:
        - AmazonDynamoDBFullAccess
+       - AmazonS3FullAccess
       MemorySize: 128
       Events:
         ApiEvent:
