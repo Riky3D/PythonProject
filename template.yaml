@@ -1,0 +1,12 @@
+Resources:
+  MyLambdaFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      Handler: lambda_function.handler
+      Runtime: python3.8
+      CodeUri: .
+      MemorySize: 128
+      Timeout: 3
+      Environment:
+        Variables:
+          KEY: "value"
