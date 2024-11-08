@@ -9,19 +9,18 @@ from dotenv import load_dotenv
 load_dotenv()
 
 API_KEY = os.getenv('API_KEY')
-# The CITY variable can now be provided dynamically through the event
 CITY = os.getenv('CITY') 
 
-def get_weather_data(city):
+def get_weather_data(CITY):
     """Fetch weather data from OpenWeatherMap API."""
     try:
-        api_url = f'http://api.openweathermap.org/data/2.5/weather?q={city}&appid={API_KEY}&units=metric'
+        api_url = f'http://api.openweathermap.org/data/2.5/weather?q={CITY}&appid={API_KEY}&units=metric'
         response = requests.get(api_url)
         response.raise_for_status()
         data = response.json()
         # Extract relevant data fields
         weather_data = {
-            'city': city,
+            'city': CITY,
             'temperature': data['main']['temp'],
             'humidity': data['main']['humidity'],
             'weather': data['weather'][0]['description'],
@@ -35,14 +34,11 @@ def get_weather_data(city):
 def lambda_handler(event, context):
     """AWS Lambda function handler"""
     
-    # Get the city name from the event (user input)
-    city = event.get('city')
     
-    if city:
-        weather_data = get_weather_data(city)
+    if CITY:
+        weather_data = get_weather_data(CITY)
         if weather_data:
-            # Uncomment and define store_data_in_dynamodb if needed
-            # store_data_in_dynamodb(weather_data)
+
             return {
                 'statusCode': 200,
                 'body': json.dumps({'message': 'Weather data fetched successfully', 'data': weather_data})
