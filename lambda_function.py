@@ -54,7 +54,7 @@ def lambda_handler(event, context):
     if CITY:
         weather_data = get_weather_data(CITY)
         if weather_data:
-
+            store_data_in_dynamodb(weather_data)
             return {
                 'statusCode': 200,
                 'body': json.dumps({'message': 'Weather data fetched successfully', 'data': weather_data})
