@@ -48,7 +48,10 @@ def store_data_in_dynamodb(weather_data):
 
 def lambda_handler(event, context):
     """AWS Lambda function handler"""
-    
+    try:
+        return table.scan()
+    except:
+        raise
     
     if CITY:
         weather_data = get_weather_data(CITY)
