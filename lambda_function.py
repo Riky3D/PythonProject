@@ -14,6 +14,7 @@ CITY = os.getenv('CITY')
 s3_client = boto3.client('s3')
 bucket_name = 'rikeshestiosite'
 
+dynamodb_client = boto3.client('dynamodb')
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('WeatherData')  # Replace with your actual table name
 
@@ -57,7 +58,7 @@ def lambda_handler(event, context):
     if CITY:
         weather_data = get_weather_data(CITY)
         if weather_data:
-            response = dynamodb.export_table_to_point_in_time(
+            response = dynamodb_client.export_table_to_point_in_time(
                 TableName=table.name,
                 S3Bucket=bucket_name,
                 ExportFormat='DYNAMODB_JSON',
