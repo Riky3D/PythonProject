@@ -35,18 +35,6 @@ def get_weather_data(city):
         print(f"Error fetching weather data: {e}")
         return None
 
-def store_data_in_dynamodb(weather_data):
-    """Store weather data in DynamoDB table."""
-    try:
-        # Convert numeric values to Decimal for DynamoDB compatibility
-        weather_data['temperature'] = Decimal(str(weather_data['temperature']))
-        weather_data['humidity'] = Decimal(str(weather_data['humidity']))
-
-        table.put_item(Item=weather_data)
-        print("Weather data stored successfully.")
-    except Exception as e:
-        print(f"Error storing data in DynamoDB: {e}")
-
 def lambda_handler(event, context):
     """AWS Lambda function handler"""
     # Get the city name from the event (user input)
