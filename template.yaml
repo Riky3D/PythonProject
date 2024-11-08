@@ -4,8 +4,14 @@ Resources:
     Properties:
       Handler: lambda_function.handler
       Runtime: python3.8
-      CodeUri: .
+      CodeUri: ./
       MemorySize: 128
+      Events:
+        ApiEvent:
+          Type: Api
+          Properties:
+            Path: /test
+            Method: get
       Timeout: 3
       Environment:
         Variables:
