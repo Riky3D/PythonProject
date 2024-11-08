@@ -53,3 +53,6 @@ def lambda_handler(event, context):
             'statusCode': 400,
             'body': json.dumps({'message': 'City not provided'})
         }
+
+if __name__ == "__main__":
+    lambda_handler(",")
