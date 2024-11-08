@@ -7,11 +7,11 @@ phases:
   build:
     commands:
       - pip install -r requirements.txt -t .
-      - aws cloudformation package --template-file template.yaml --output-template-file template-out.yaml --s3-bucket rikesh-estiotest
+      - aws cloudformation package --template-file template.yml --output-template-file template-out.yml --s3-bucket rikesh-estiotest
   post_build:
     commands:
       - echo "Build and packaging completed successfully."
 artifacts:
   files:
-    - template.yaml
-    - template-out.yaml
+    - template.yml
+    - template-out.yml
