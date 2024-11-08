@@ -11,6 +11,9 @@ load_dotenv()
 API_KEY = os.getenv('API_KEY')
 CITY = os.getenv('CITY') 
 
+dynamodb = boto3.resource('dynamodb')
+table = dynamodb.Table('WeatherData')  # Replace with your actual table name
+
 def get_weather_data(CITY):
     """Fetch weather data from OpenWeatherMap API."""
     try:
@@ -30,6 +33,18 @@ def get_weather_data(CITY):
     except requests.RequestException as e:
         print(f"Error fetching weather data: {e}")
         return None
+
+def store_data_in_dynamodb(weather_data):
+    """Store weather data in DynamoDB table."""
+    try:
+        # Convert numeric values to Decimal for DynamoDB compatibility
+        weather_data['temperature'] = Decimal(str(weather_data['temperature']))
+        weather_data['humidity'] = Decimal(str(weather_data['humidity']))
+
+        table.put_item(Item=weather_data)
+        print("Weather data stored successfully.")
+    except Exception as e:
+        print(f"Error storing data in DynamoDB: {e}")
 
 def lambda_handler(event, context):
     """AWS Lambda function handler"""
