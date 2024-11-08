@@ -3,13 +3,14 @@ version: 0.2
 phases:
   install:
     runtime-versions:
-      python: 3.9  # Adjust to your Lambda runtime
+      python: 3.8
     commands:
-      - pip install -r requirements.txt -t .
+      - pip install -r requirements.txt
   build:
     commands:
-      - echo Build started on `date`
-      - zip -r lambda.zip .  # Zip the Lambda function for deployment
+      - zip -r lambda.zip WeatherAPIAWS.py
 artifacts:
   files:
-    - lambda.zip  # Artifact produced for deployment
+    - lambda.zip
+    - '**/*'
+  discard-paths: yes
