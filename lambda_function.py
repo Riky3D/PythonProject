@@ -38,6 +38,7 @@ def store_data_in_dynamodb(weather_data):
     """Store weather data in DynamoDB table."""
     
     try:
+        weather_data = get_weather_data(CITY)
         # Convert numeric values to Decimal for DynamoDB compatibility
         weather_data['temperature'] = Decimal(str(weather_data['temperature']))
         weather_data['humidity'] = Decimal(str(weather_data['humidity']))
@@ -49,15 +50,6 @@ def store_data_in_dynamodb(weather_data):
 
 def lambda_handler(event, context):
     """AWS Lambda function handler"""
-    try:
-        # Convert numeric values to Decimal for DynamoDB compatibility
-        weather_data['temperature'] = Decimal(str(weather_data['temperature']))
-        weather_data['humidity'] = Decimal(str(weather_data['humidity']))
-
-        response=table.put_item(Item=weather_data)
-        print("Weather data stored successfully.")
-    except Exception as e:
-        print(f"Error storing data in DynamoDB: {e}")
 
     if CITY:
         weather_data = get_weather_data(CITY)
