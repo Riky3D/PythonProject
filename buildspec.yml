@@ -1,0 +1,15 @@
+version: 0.2
+
+phases:
+  install:
+    runtime-versions:
+      python: 3.9  # Adjust to your Lambda runtime
+    commands:
+      - pip install -r requirements.txt -t .
+  build:
+    commands:
+      - echo Build started on `date`
+      - zip -r lambda.zip .  # Zip the Lambda function for deployment
+artifacts:
+  files:
+    - lambda.zip  # Artifact produced for deployment
