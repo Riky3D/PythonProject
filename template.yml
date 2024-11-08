@@ -24,7 +24,7 @@ Resources:
                   - "dynamodb:UpdateItem"
                   - "dynamodb:DeleteItem"
                 Resource: 
-                  - !GetAtt MyDynamoDBTable.Arn
+                  - arn:aws:dynamodb:eu-west-2:989194088083:table/WeatherData
 
 
 Resources:
