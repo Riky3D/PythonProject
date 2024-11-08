@@ -62,7 +62,7 @@ def lambda_handler(event, context):
             s3.response = s3_client.get_object(Bucket=bucket_name, Key=file_name)
             print("s3 response:", s3_response)
 
-            file_data = s3_response["Body"].read()decode('utf')
+            file_data = s3_response["Body"].read().decode('utf')
             print("file_data", file_data)
             store_data_in_dynamodb(weather_data)
             return {
