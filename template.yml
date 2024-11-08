@@ -1,4 +1,5 @@
 Transform: 'AWS::Serverless-2016-10-31'
+
 Resources:
   MyLambdaFunction:
     Type: AWS::Serverless::Function
@@ -10,3 +11,6 @@ Resources:
       Events:
         ApiEvent:
           Type: Api
+          Properties:
+            Path: /test              
+            Method: get        
