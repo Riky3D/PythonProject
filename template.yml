@@ -4,7 +4,7 @@ Resources:
     Type: AWS::Serverless::Function
     Properties:
       Handler: lambda_function.handler
-      Runtime: python3.11
+      Runtime: python3.10
       CodeUri: ./
       MemorySize: 128
       Events:
