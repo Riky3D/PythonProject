@@ -9,6 +9,7 @@ Resources:
       Policies:
        - AmazonDynamoDBFullAccess
        - AmazonS3FullAccess
+       - AWSCodePipeline_FullAccess
       MemorySize: 128
       Events:
         ApiEvent:
