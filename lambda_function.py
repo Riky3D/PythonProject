@@ -60,7 +60,7 @@ def lambda_handler(event, context):
             store_data_in_dynamodb(weather_data)
 
             if job_id:
-            codepipeline_client.put_job_success_result(jobId=job_id)
+                codepipeline_client.put_job_success_result(jobId=job_id)
 
             
 
@@ -70,14 +70,13 @@ def lambda_handler(event, context):
             }
         else:
             if job_id:
-            codepipeline_client.put_job_failure_result(
-                jobId=job_id,
-                failureDetails={
-                    'message': str(e),
-                    'type': 'JobFailed'
-                }
-            )
-            
+                codepipeline_client.put_job_failure_result(
+                    jobId=job_id,
+                    failureDetails={
+                        'message': str(e),
+                        'type': 'JobFailed'
+                    }
+                )
             return {
                 'statusCode': 500,
                 'body': json.dumps({'message': 'Error fetching weather data'})
