@@ -73,7 +73,7 @@ def lambda_handler(event, context):
                 codepipeline_client.put_job_failure_result(
                     jobId=job_id,
                     failureDetails={
-                        'message': str(e),
+                        'message': 'Error fetching weather data',
                         'type': 'JobFailed'
                     }
                 )
