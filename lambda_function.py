@@ -5,15 +5,16 @@ import datetime
 import json
 from decimal import Decimal
 from dotenv import load_dotenv
+from botocore.exceptions import ClientError
 
 load_dotenv()
-
 API_KEY = os.getenv('API_KEY')
 CITY = os.getenv('CITY') 
 
+codepipeline_client = boto3.client('codepipeline')
 
 dynamodb = boto3.resource('dynamodb')
-table = dynamodb.Table('WeatherData')  # Replace with your actual table name
+table = dynamodb.Table('WeatherData')
 
 def get_weather_data(CITY):
     """Fetch weather data from OpenWeatherMap API."""
@@ -22,7 +23,6 @@ def get_weather_data(CITY):
         response = requests.get(api_url)
         response.raise_for_status()
         data = response.json()
-        # Extract relevant data fields
         weather_data = {
             'city': CITY,
             'temperature': data['main']['temp'],
@@ -51,16 +51,33 @@ def store_data_in_dynamodb(weather_data):
 
 def lambda_handler(event, context):
     """AWS Lambda function handler"""
+    
+    job_id = event.get('CodePipeline.job', {}).get('id')
 
     if CITY:
         weather_data = get_weather_data(CITY)
         if weather_data:
             store_data_in_dynamodb(weather_data)
+
+            if job_id:
+            codepipeline_client.put_job_success_result(jobId=job_id)
+
+            
+
             return {
                 'statusCode': 200,
                 'body': json.dumps({'message': 'Weather data fetched successfully', 'data': weather_data})
             }
         else:
+            if job_id:
+            codepipeline_client.put_job_failure_result(
+                jobId=job_id,
+                failureDetails={
+                    'message': str(e),
+                    'type': 'JobFailed'
+                }
+            )
+            
             return {
                 'statusCode': 500,
                 'body': json.dumps({'message': 'Error fetching weather data'})
