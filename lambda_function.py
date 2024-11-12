@@ -59,7 +59,7 @@ def lambda_handler(event, context):
     if rotation_data:
         try:
             # Store the fetched data in DynamoDB
-            store_data_in_dynamodb(rotation_data, timestamp_now)
+            store_rotation_in_dynamodb(rotation_data, timestamp_now)
             
             # Report success to CodePipeline
             if job_id:
