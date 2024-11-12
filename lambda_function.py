@@ -12,7 +12,6 @@ API_KEY = os.getenv('API_KEY')
 CITY = os.getenv('CITY') 
 
 codepipeline_client = boto3.client('codepipeline')
-
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('WeatherData')
 
@@ -37,39 +36,58 @@ def get_weather_data(CITY):
 
 def store_data_in_dynamodb(weather_data):
     """Store weather data in DynamoDB table."""
-    
     try:
-        weather_data = get_weather_data(CITY)
         # Convert numeric values to Decimal for DynamoDB compatibility
         weather_data['temperature'] = Decimal(str(weather_data['temperature']))
         weather_data['humidity'] = Decimal(str(weather_data['humidity']))
-
-        response=table.put_item(Item=weather_data)
+        
+        response = table.put_item(Item=weather_data)
         print("Weather data stored successfully.")
     except Exception as e:
         print(f"Error storing data in DynamoDB: {e}")
+        raise e  # Re-raise to handle in the lambda_handler if needed
 
 def lambda_handler(event, context):
     """AWS Lambda function handler"""
-    
     job_id = event.get('CodePipeline.job', {}).get('id')
-
-    if CITY:
-        weather_data = get_weather_data(CITY)
-        if weather_data:
+    print(f"Received job_id: {job_id}")
+    
+    if not CITY:
+        print("City not provided.")
+        return {
+            'statusCode': 400,
+            'body': json.dumps({'message': 'City not provided'})
+        }
+    
+    weather_data = get_weather_data(CITY)
+    if weather_data:
+        try:
             store_data_in_dynamodb(weather_data)
-
             if job_id:
                 codepipeline_client.put_job_success_result(jobId=job_id)
-
-            
-
             return {
                 'statusCode': 200,
                 'body': json.dumps({'message': 'Weather data fetched successfully', 'data': weather_data})
             }
-        else:
+        except Exception as e:
+            # Log and handle DynamoDB store failure as job failure
+            print(f"Error storing data in DynamoDB: {e}")
             if job_id:
+                codepipeline_client.put_job_failure_result(
+                    jobId=job_id,
+                    failureDetails={
+                        'message': 'Error storing data in DynamoDB',
+                        'type': 'JobFailed'
+                    }
+                )
+            return {
+                'statusCode': 500,
+                'body': json.dumps({'message': 'Error storing data in DynamoDB'})
+            }
+    else:
+        print("Failed to fetch weather data.")
+        if job_id:
+            try:
                 codepipeline_client.put_job_failure_result(
                     jobId=job_id,
                     failureDetails={
@@ -77,12 +95,9 @@ def lambda_handler(event, context):
                         'type': 'JobFailed'
                     }
                 )
-            return {
-                'statusCode': 500,
-                'body': json.dumps({'message': 'Error fetching weather data'})
-            }
-    else:
+            except ClientError as e:
+                print(f"Failed to report job failure: {e}")
         return {
-            'statusCode': 400,
-            'body': json.dumps({'message': 'City not provided'})
+            'statusCode': 500,
+            'body': json.dumps({'message': 'Error fetching weather data'})
         }
