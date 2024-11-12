@@ -6,7 +6,6 @@ from dotenv import load_dotenv
 from botocore.exceptions import ClientError
 
 
-
 codepipeline_client = boto3.client('codepipeline')
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('RawData')
