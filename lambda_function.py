@@ -5,14 +5,14 @@ import json
 from dotenv import load_dotenv
 from botocore.exceptions import ClientError
 
-
+api_key = "RGAPI-6dcfb8aa-2512-4490-8359-f1bb429eeeaf"
 codepipeline_client = boto3.client('codepipeline')
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('RawData')
 
 def get_champion_rotation(api_key):
-    url = "https://euw1.api.riotgames.com/lol/platform/v3/champion-rotations"
-    headers = {"X-Riot-Token": RGAPI-6dcfb8aa-2512-4490-8359-f1bb429eeeaf}
+    url = f"https://euw1.api.riotgames.com/lol/platform/v3/champion-rotations"
+    headers = {"X-Riot-Token": api_key}
     
     response = requests.get(url, headers=headers)
     
@@ -54,7 +54,7 @@ def lambda_handler(event, context):
     timestamp_now = int(datetime.datetime.now().timestamp())
     
     # Fetch champion rotation data from Riot API
-    rotation_data = get_champion_rotation(API_KEY)
+    rotation_data = get_champion_rotation(api_key)
     
     if rotation_data:
         try:
