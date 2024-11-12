@@ -27,12 +27,10 @@ def get_champion_rotation(api_key):
 def store_rotation_in_dynamodb(data, timestamp):
     try:
         # Convert readable timestamp
-        readable_time = datetime.datetime.fromtimestamp(timestamp).isoformat()
         
         # Prepare item for DynamoDB
         item = {
             "timestamp": str(timestamp),
-            "readableTime": readable_time,
             "freeChampionIds": data.get("freeChampionIds", []),
             "freeChampionIdsForNewPlayers": data.get("freeChampionIdsForNewPlayers", []),
             "maxNewPlayerLevel": data.get("maxNewPlayerLevel", 0)
