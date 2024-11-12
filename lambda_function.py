@@ -31,7 +31,7 @@ def store_rotation_in_dynamodb(data, timestamp):
         
         # Prepare item for DynamoDB
         item = {
-            "timestamp": timestamp,
+            "timestamp": str(timestamp),
             "readableTime": readable_time,
             "freeChampionIds": data.get("freeChampionIds", []),
             "freeChampionIdsForNewPlayers": data.get("freeChampionIdsForNewPlayers", []),
