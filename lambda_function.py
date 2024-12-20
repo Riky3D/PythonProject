@@ -5,7 +5,7 @@ import json
 from dotenv import load_dotenv
 from botocore.exceptions import ClientError 
 
-api_key = "RGAPI-3e258e39-6cf8-41f2-bd99-cdab575bff38"
+api_key = "RGAPI-a2f9e9e0-dd50-477f-84c7-848e4a31ec47"
 codepipeline_client = boto3.client('codepipeline')
 dynamodb = boto3.resource('dynamodb')
 table = dynamodb.Table('RawData')
